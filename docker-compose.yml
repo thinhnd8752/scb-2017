@@ -1,0 +1,22 @@
+version: '2'
+services:
+  db:
+    container_name: todo-app-db
+    build:
+      context: ./db/pg
+  app:
+    build: .
+    command: sh ./dev-start-app.sh
+    volumes:
+        - .:/app
+    container_name: todo-app
+    environment:
+      PGHOST: db
+      PGPORT: 5432
+      PGDATABASE: docker-demo-app
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
